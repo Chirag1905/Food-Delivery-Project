@@ -1,9 +1,20 @@
 import React from 'react'
 
-const restaurantLogin = () => {
+const RestaurantLogin = () => {
   return (
-    <div>restaurantLogin</div>
+    <>
+    <h3>Login Component</h3>
+    <div className="input-wrapper">
+      <input type="text" name="" placeholder="Enter email id" className="input-field"/>
+    </div>
+    <div className="input-wrapper">
+      <input type="password" name="" placeholder="Enter password" className="input-field"/>
+    </div>
+    <div className="input-wrapper">
+      <button className="button">Login</button>
+    </div>
+    </>
   )
 }
 
-export default restaurantLogin
+export default RestaurantLogin
