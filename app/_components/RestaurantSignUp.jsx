@@ -1,7 +1,10 @@
+import { useRouter } from "next/navigation";
+import { stringify } from "postcss";
 import React from "react";
 import { useForm } from "react-hook-form";
 
 const RestaurantSignUp = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -10,7 +13,7 @@ const RestaurantSignUp = () => {
 
   const onSubmit = async (data) => {
     console.log(data.email);
-    let result = await fetch("http://localhost:3000/api/restaurant", {
+    let response = await fetch("http://localhost:3000/api/restaurant", {
       method: "POST",
       body: JSON.stringify({
         email: data.email,
@@ -21,10 +24,13 @@ const RestaurantSignUp = () => {
         contact: data.contact,
       }),
     });
-    result = await result.json();
-    console.log("🚀 ~ onSubmit ~ result:", result);
-    if(result.success){
-      alert("Restaurant Registrated Sucessfully")
+    response = await response.json();
+    console.log("🚀 ~ onSubmit ~ result:", response);
+    if (response.success) {
+      const { result } = response;
+      delete result.password;
+      localStorage.setItem("restaurantUser", JSON, stringify(result));
+      router.push("/restaurant/dashboard");
     }
   };
   return (
