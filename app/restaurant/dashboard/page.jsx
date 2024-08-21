@@ -1,9 +1,11 @@
+import RestaurantHeader from "@/app/_components/RestaurantHeader";
 import React from "react";
 
 const page = () => {
   return (
     <>
-      <h1>Welcom to dashboard</h1>
+    <RestaurantHeader/>
+      <h1>Welcome to dashboard</h1>
     </>
   );
 };
