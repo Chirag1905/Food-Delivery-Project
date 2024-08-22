@@ -20,10 +20,10 @@ const RestaurantHeader = () => {
     }
   }, []);
 
-  const logout=()=>{
-    localStorage.removeItem("restaurantUser")
+  const logout = () => {
+    localStorage.removeItem("restaurantUser");
     router.push("/restaurant");
-  }
+  };
 
   return (
     <div className="flex justify-between">

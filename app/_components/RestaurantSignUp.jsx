@@ -1,5 +1,4 @@
 import { useRouter } from "next/navigation";
-import { stringify } from "postcss";
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -8,11 +7,22 @@ const RestaurantSignUp = () => {
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data.email);
+    if (data.password !== data.c_password) {
+      setError("c_password", {
+        type: "manual",
+        message: "Passwords do not match",
+      });
+      return; // Prevent form submission
+    } else {
+      clearErrors("c_password"); // Clear the error if passwords match
+    }
+
     let response = await fetch("http://localhost:3000/api/restaurant", {
       method: "POST",
       body: JSON.stringify({
@@ -24,8 +34,10 @@ const RestaurantSignUp = () => {
         contact: data.contact,
       }),
     });
+
     response = await response.json();
     console.log("🚀 ~ onSubmit ~ result:", response);
+
     if (response.success) {
       const { result } = response;
       delete result.password;
@@ -33,6 +45,7 @@ const RestaurantSignUp = () => {
       router.push("/restaurant/dashboard");
     }
   };
+
   return (
     <>
       <h3>SignUp</h3>
