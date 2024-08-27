@@ -11,7 +11,7 @@ const RestaurantHeader = () => {
 
   useEffect(() => {
     let data = localStorage.getItem("restaurantUser");
-    if (!data && pathname == "/restaurant") {
+    if (!data && pathname == "/restaurant/dashboard") {
       router.push("/restaurant");
     } else if (data && pathname == "/restaurant") {
       router.push("/restaurant/dashboard");
@@ -24,7 +24,9 @@ const RestaurantHeader = () => {
     localStorage.removeItem("restaurantUser");
     router.push("/restaurant");
   };
-
+  
+  // console.log("🚀 ~ RestaurantHeader ~ details:", details)
+  // console.log("🚀 ~ RestaurantHeader ~ details:", details.result.name)
   return (
     <div className="flex justify-between">
       <Image src="/Logo.jpeg" alt="Restaurant Logo" width={50} height={50} />
@@ -33,28 +35,26 @@ const RestaurantHeader = () => {
         <li className="no-underline">
           <Link href="/">Home</Link>
         </li>
-        {details && details.name ? (
-          <>
-            <li className="no-underline">
+        <li className="no-underline">
+          {details && details.name ? (
+            <>
+              <Link href="/">Profile</Link>
               <button
                 className="no-underline bg-transparent border-none bg-blue-500 text-[18px] cursor-pointer"
                 onClick={logout()}
               >
                 Logout
               </button>
-            </li>
-            <li className="no-underline">
-              <Link href="/">Profile</Link>
-            </li>
-          </>
-        ) : (
-          <li className="no-underline">
+            </>
+          ) : (
             <Link href="/">Login/SignUp</Link>
-          </li>
-        )}
+          )}
+        </li>
       </ul>
     </div>
   );
 };
 
 export default RestaurantHeader;
+          // {details && details.result.name ? (
+                      

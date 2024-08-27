@@ -11,14 +11,13 @@ const Restaurant = () => {
     <>
       <div className="text-center">
         <RestaurantHeader />
-        <h1>Restaurant Login/SignUp Page</h1>
+        <h1 className="text-3xl font-bold">Restaurant</h1>
         {login ? <RestaurantLogin /> : <RestaurantSignUp />}
-
         <div>
           <button className="button-link" onClick={() => setLogin(!login)}>
             {login
-              ? "Do Not have Account? SignUp"
-              : "Already have Account? SignIn"}
+              ? "Do not have account? SignUp"
+              : "Already have account? SignIn"}
           </button>
         </div>
       </div>

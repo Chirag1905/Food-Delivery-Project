@@ -1,19 +1,40 @@
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 
 const RestaurantLogin = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    let response = await fetch("http://localhost:3000/api/restaurant", {
+      method: "POST",
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password,
+        login: true,
+      }),
+    });
+
+    response = await response.json();
+    if (response.success) {
+      // const { result } = response;
+      const { result } = response;
+      delete result.password;
+      localStorage.setItem("restaurantUser", JSON.stringify({ result }));
+      router.push("/restaurant/dashboard");
+    } else {
+      alert("Login Failed");
+    }
   };
+
   return (
     <>
-      <h3>SignIn</h3>
+      <h3 className="text-2xl font-semibold">Login</h3>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <div className="m-[10px]">
           <input
@@ -34,7 +55,7 @@ const RestaurantLogin = () => {
           {errors.password && <p>{errors.password.message}</p>}
         </div>
         <div className="m-[10px]">
-          <button className="w-[200px] h-[30px]">Login</button>
+          <button className="w-[200px] h-[30px]">SignIn</button>
         </div>
       </form>
     </>

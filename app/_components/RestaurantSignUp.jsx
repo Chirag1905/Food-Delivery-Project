@@ -18,9 +18,9 @@ const RestaurantSignUp = () => {
         type: "manual",
         message: "Passwords do not match",
       });
-      return; // Prevent form submission
+      return;
     } else {
-      clearErrors("c_password"); // Clear the error if passwords match
+      clearErrors("c_password");
     }
 
     let response = await fetch("http://localhost:3000/api/restaurant", {
@@ -36,19 +36,19 @@ const RestaurantSignUp = () => {
     });
 
     response = await response.json();
-    console.log("🚀 ~ onSubmit ~ result:", response);
-
     if (response.success) {
       const { result } = response;
       delete result.password;
-      localStorage.setItem("restaurantUser", JSON.stringify(result));
+      localStorage.setItem("restaurantUser", JSON.stringify({result}));
       router.push("/restaurant/dashboard");
+    } else {
+      alert("Registration Failed");
     }
   };
 
   return (
     <>
-      <h3>SignUp</h3>
+      <h3 className="text-2xl font-semibold">Register</h3>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <div className="m-[10px]">
           <input
@@ -116,7 +116,7 @@ const RestaurantSignUp = () => {
         </div>
         <div className="m-[10px]">
           <button type="submit" className="w-[200px] h-[30px]">
-            Register
+            SignUp
           </button>
         </div>
       </form>
