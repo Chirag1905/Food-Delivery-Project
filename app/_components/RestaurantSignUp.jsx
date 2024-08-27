@@ -13,6 +13,7 @@ const RestaurantSignUp = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    console.log("🚀 ~ onSubmit ~ data:", data)
     if (data.password !== data.c_password) {
       setError("c_password", {
         type: "manual",
@@ -36,6 +37,7 @@ const RestaurantSignUp = () => {
     });
 
     response = await response.json();
+    console.log("🚀 ~ onSubmit ~ response:", response)
     if (response.success) {
       const { result } = response;
       delete result.password;
