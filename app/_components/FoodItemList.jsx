@@ -1,9 +1,11 @@
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 
 const FoodItemList = () => {
   const [foodItems, setFoodItems] = useState(undefined);
-  
+  const router = useRouter();
+
   useEffect(() => {
     loadFoodItems();
   }, []);
@@ -14,15 +16,24 @@ const FoodItemList = () => {
 
   const loadFoodItems = async () => {
     let response = await fetch(
-        `http://localhost:3000/api/restaurant/foods/${resto_id}`
+      `http://localhost:3000/api/restaurant/foods/${resto_id}`
     );
     response = await response.json();
-    if (response.success) {
-      setFoodItems(response.result);
-    } else {
-      console.error("Error fetching food items");
-    }
-};
+    response.success
+      ? setFoodItems(response.result)
+      : console.error("Error fetching food items");
+  };
+
+  const deleteFoodItem = async (id) => {
+    let response = await fetch(
+      `http://localhost:3000/api/restaurant/foods/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    response = await response.json();
+    response.success ? loadFoodItems() : alert("food item not deleted");
+  };
   return (
     <>
       <div>FoodItemList</div>
@@ -42,7 +53,7 @@ const FoodItemList = () => {
           </tr>
         </thead>
         <tbody>
-        {foodItems &&
+          {foodItems &&
             foodItems.map((item, key) => (
               <tr key={key}>
                 <td className="border border-[#000] border-collapse p-2">
@@ -58,13 +69,24 @@ const FoodItemList = () => {
                   {item.description}
                 </td>
                 <td className="border border-[#000] border-collapse p-2">
-                  <Image src={item.img_path} alt={item.name} width={50} height={50} />
+                  <Image
+                    src={item.img_path}
+                    alt={item.name}
+                    width={50}
+                    height={50}
+                  />
                 </td>
                 <td>
-                  <button className="border border-[#000] border-collapse p-2 m-2">
+                  <button
+                    className="border border-[#000] border-collapse p-2 m-2"
+                    onClick={() => router.push(`dashboard/${item._id}`)}
+                  >
                     Edit
                   </button>
-                  <button className="border border-[#000] border-collapse p-2 m-2">
+                  <button
+                    className="border border-[#000] border-collapse p-2 m-2"
+                    onClick={() => deleteFoodItem(item._id)}
+                  >
                     Delete
                   </button>
                 </td>

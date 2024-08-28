@@ -18,7 +18,7 @@ const Dashboard = () => {
       <button onClick={() => setAddItem(false)} className="m-2">
         Dashboard
       </button>
-      {addItem ? <AddFoodItem /> : <FoodItemList />}
+      {addItem ? <AddFoodItem setAddItem={setAddItem} /> : <FoodItemList />}
     </>
   );
 };
