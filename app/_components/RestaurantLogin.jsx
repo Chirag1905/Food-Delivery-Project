@@ -7,6 +7,8 @@ const RestaurantLogin = () => {
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm();
 

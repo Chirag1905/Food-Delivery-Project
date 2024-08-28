@@ -31,7 +31,7 @@ const RestaurantSignUp = () => {
         password: data.password,
         name: data.name,
         city: data.city,
-        address: data.address,
+        address: data.address,  
         contact: data.contact,
       }),
     });

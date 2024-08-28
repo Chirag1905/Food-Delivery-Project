@@ -5,43 +5,42 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 
 const RestaurantHeader = () => {
-  const [details, setDetails] = useState();
+  const [details, setDetails] = useState(null);
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    let data = localStorage.getItem("restaurantUser");
-    if (!data && pathname == "/restaurant/dashboard") {
+    const data = localStorage.getItem("restaurantUser");
+
+    if (!data && pathname === "/restaurant/dashboard") {
       router.push("/restaurant");
-    } else if (data && pathname == "/restaurant") {
+    } else if (data && pathname === "/restaurant") {
       router.push("/restaurant/dashboard");
     } else {
       setDetails(JSON.parse(data));
     }
-  }, []);
+  }, [pathname, router]);
 
   const logout = () => {
     localStorage.removeItem("restaurantUser");
+    setDetails(null);
     router.push("/restaurant");
   };
-  
-  // console.log("🚀 ~ RestaurantHeader ~ details:", details)
-  // console.log("🚀 ~ RestaurantHeader ~ details:", details.result.name)
+
   return (
     <div className="flex justify-between">
       <Image src="/Logo.jpeg" alt="Restaurant Logo" width={50} height={50} />
-      <ul className="flex space-x-5 space-y-5 pr-[5px]">
-        <li className="no-underline" />
+      <ul className="flex space-x-5 pr-[5px]">
         <li className="no-underline">
           <Link href="/">Home</Link>
         </li>
-        <li className="no-underline">
-          {details && details.name ? (
+        <li className="no-underline space-x-5">
+          {details ? (
             <>
               <Link href="/">Profile</Link>
               <button
-                className="no-underline bg-transparent border-none bg-blue-500 text-[18px] cursor-pointer"
-                onClick={logout()}
+                className="no-underline bg-transparent border-none bg-blue-500  cursor-pointer"
+                onClick={logout}
               >
                 Logout
               </button>
@@ -56,5 +55,3 @@ const RestaurantHeader = () => {
 };
 
 export default RestaurantHeader;
-          // {details && details.result.name ? (
-                      

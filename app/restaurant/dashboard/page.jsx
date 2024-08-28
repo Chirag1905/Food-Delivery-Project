@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 import AddFoodItem from "@/app/_components/AddFoodItem";
 import RestaurantHeader from "@/app/_components/RestaurantHeader";
 import React from "react";
+import { connectionStr } from "@/app/lib/db";
+import FoodItemList from "@/app/_components/FoodItemList";
 
 const Dashboard = () => {
+  // console.log("🚀 ~ connectToDatabase ~ connectionStr:", connectionStr);
   const [addItem, setAddItem] = useState(false);
-
   return (
     <>
       <RestaurantHeader />
@@ -16,7 +18,7 @@ const Dashboard = () => {
       <button onClick={() => setAddItem(false)} className="m-2">
         Dashboard
       </button>
-      {addItem ? <AddFoodItem /> : <h1>Restaurant Dashboard</h1>}
+      {addItem ? <AddFoodItem /> : <FoodItemList />}
     </>
   );
 };

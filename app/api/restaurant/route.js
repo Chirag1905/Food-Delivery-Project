@@ -9,7 +9,6 @@ async function connectToDatabase() {
     console.log("Connected to MongoDB");
   }
 }
-console.log("🚀 ~ connectToDatabase ~ connectionStr:", connectionStr);
 
 export async function GET() {
   try {
