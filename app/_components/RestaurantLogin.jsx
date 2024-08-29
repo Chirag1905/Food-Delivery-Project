@@ -6,7 +6,7 @@ const RestaurantLogin = () => {
   const router = useRouter();
   const {
     register,
-    handleSubmit,
+    handleSubmit, 
     setError,
     clearErrors,
     formState: { errors },
@@ -23,15 +23,14 @@ const RestaurantLogin = () => {
     });
 
     response = await response.json();
-    if (response.success) {
-      // const { result } = response;
-      const { result } = response;
-      delete result.password;
-      localStorage.setItem("restaurantUser", JSON.stringify({ result }));
-      router.push("/restaurant/dashboard");
-    } else {
-      alert("Login Failed");
-    }
+    response.success
+      ? (() => {
+          const { result } = response;
+          delete result.password;
+          localStorage.setItem("restaurantUser", JSON.stringify(result));
+          router.push("/restaurant/dashboard");
+        })()
+      : alert("Login Failed");
   };
 
   return (

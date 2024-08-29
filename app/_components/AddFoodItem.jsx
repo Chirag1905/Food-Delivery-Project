@@ -13,7 +13,7 @@ const AddFoodItem = (props) => {
     let resto_id;
     const resturantData = JSON.parse(localStorage.getItem("restaurantUser"));
     if (resturantData) {
-      resto_id = resturantData.result._id;
+      resto_id = resturantData._id;
     }
     let response = await fetch("http://localhost:3000/api/restaurant/foods", {
       method: "POST",
@@ -27,12 +27,9 @@ const AddFoodItem = (props) => {
     });
 
     response = await response.json();
-    if (response.success) {
-      alert("Food Item Added Suceesfully");
-      props.setAddItem(false);
-    } else {
-      alert("Adding Food Item Failed");
-    }
+    response.success
+      ? (alert("Food Item Added Suceesfully"), props.setAddItem(false))
+      : null;
   };
   return (
     <>

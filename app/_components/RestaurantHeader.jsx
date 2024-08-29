@@ -12,13 +12,11 @@ const RestaurantHeader = () => {
   useEffect(() => {
     const data = localStorage.getItem("restaurantUser");
 
-    if (!data && pathname === "/restaurant/dashboard") {
-      router.push("/restaurant");
-    } else if (data && pathname === "/restaurant") {
-      router.push("/restaurant/dashboard");
-    } else {
-      setDetails(JSON.parse(data));
-    }
+    !data && pathname === "/restaurant/dashboard"
+      ? router.push("/restaurant")
+      : data && pathname === "/restaurant"
+      ? router.push("/restaurant/dashboard")
+      : setDetails(JSON.parse(data));
   }, [pathname, router]);
 
   const logout = () => {
@@ -28,7 +26,7 @@ const RestaurantHeader = () => {
   };
 
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between space-y-2 font-medium text-blue-600">
       <Image src="/Logo.jpeg" alt="Restaurant Logo" width={50} height={50} />
       <ul className="flex space-x-5 pr-[5px]">
         <li className="no-underline">

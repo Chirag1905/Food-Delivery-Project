@@ -13,7 +13,7 @@ const RestaurantSignUp = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log("🚀 ~ onSubmit ~ data:", data)
+    console.log("🚀 ~ onSubmit ~ data:", data);
     if (data.password !== data.c_password) {
       setError("c_password", {
         type: "manual",
@@ -31,21 +31,20 @@ const RestaurantSignUp = () => {
         password: data.password,
         name: data.name,
         city: data.city,
-        address: data.address,  
+        address: data.address,
         contact: data.contact,
       }),
     });
 
     response = await response.json();
-    console.log("🚀 ~ onSubmit ~ response:", response)
-    if (response.success) {
-      const { result } = response;
-      delete result.password;
-      localStorage.setItem("restaurantUser", JSON.stringify({result}));
-      router.push("/restaurant/dashboard");
-    } else {
-      alert("Registration Failed");
-    }
+    response.success
+      ? (() => {
+          const { result } = response;
+          delete result.password;
+          localStorage.setItem("restaurantUser", JSON.stringify(result));
+          router.push("/restaurant/dashboard");
+        })()
+      : alert("Registration Failed");
   };
 
   return (

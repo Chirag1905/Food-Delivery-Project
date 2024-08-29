@@ -12,7 +12,8 @@ const FoodItemList = () => {
 
   let resto_id;
   const resturantData = JSON.parse(localStorage.getItem("restaurantUser"));
-  resturantData ? (resto_id = resturantData.result._id) : "";
+  console.log("🚀 ~ FoodItemList ~ resturantData:", resturantData)
+  resturantData ? (resto_id = resturantData._id) : null;
 
   const loadFoodItems = async () => {
     let response = await fetch(
@@ -72,7 +73,7 @@ const FoodItemList = () => {
                   <Image
                     src={item.img_path}
                     alt={item.name}
-                    width={50}
+                    width={60}
                     height={50}
                   />
                 </td>
