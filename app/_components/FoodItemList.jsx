@@ -12,7 +12,6 @@ const FoodItemList = () => {
 
   let resto_id;
   const resturantData = JSON.parse(localStorage.getItem("restaurantUser"));
-  console.log("🚀 ~ FoodItemList ~ resturantData:", resturantData)
   resturantData ? (resto_id = resturantData._id) : null;
 
   const loadFoodItems = async () => {
