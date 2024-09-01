@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { register, setValue } = useForm();
-
   const [locations, setLocations] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
   const [showLocation, setShowLocation] = useState(false);

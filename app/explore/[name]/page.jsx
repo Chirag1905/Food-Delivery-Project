@@ -9,6 +9,18 @@ const Page = (props) => {
   const [restaurantDetails, setRestaurantDetails] = useState();
   const [foodItemsDetails, setFootItemsDetails] = useState([]);
   const [cartData, setCartData] = useState();
+  const [cartStorage, setCartStorage] = useState(
+    JSON.parse(localStorage.getItem("cart"))
+  );
+  const [cartIds, setCartIDs] = useState(
+    cartStorage
+      ? () =>
+          cartStorage.map((item) => {
+            return item._id;
+          })
+      : []
+  );
+  const [removeCartData, setRemoveCartData] = useState();
 
   useEffect(() => {
     loadRestaurantsDetails();
@@ -31,11 +43,22 @@ const Page = (props) => {
   };
 
   const addToCart = (item) => {
+    let localCartIds = cartIds;
+    localCartIds.push(item._id);
+    setCartIDs(localCartIds);
     setCartData(item);
+    setRemoveCartData();
+  };
+  
+  const removeFromCart = (id) => {
+    setRemoveCartData(id);
+    let localIds = cartIds.filter((item) => item != id);
+    setCartData();
+    setCartIDs(localIds);
   };
   return (
     <>
-      <CustomerHeader cartData={cartData} />
+      <CustomerHeader cartData={cartData} removeCartData={removeCartData} />
       <div
         className="h-[230px] p-[30px] bg-black bg-opacity-70 bg-blend-multiply text-white"
         style={{
@@ -80,12 +103,21 @@ const Page = (props) => {
                 <div className="description font-light">
                   {item?.description}
                 </div>
-                <button
-                  className="text-white border-none bg-orange-400 p-1 rounded cursor-pointer"
-                  onClick={() => addToCart(item)}
-                >
-                  Add to cart
-                </button>
+                {cartIds.includes(item._id) ? (
+                  <button
+                    className="text-white border-none bg-orange-400 p-1 rounded cursor-pointer"
+                    onClick={() => removeFromCart(item._id)}
+                  >
+                    Remove From Cart
+                  </button>
+                ) : (
+                  <button
+                    className="text-white border-none bg-orange-400 p-1 rounded cursor-pointer"
+                    onClick={() => addToCart(item)}
+                  >
+                    Add to cart
+                  </button>
+                )}
               </div>
             </div>
           ))
