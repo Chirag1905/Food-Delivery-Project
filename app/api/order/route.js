@@ -1,5 +1,5 @@
 import { connectionStr } from "@/app/lib/db";
-import { foodSchema } from "@/app/lib/foodsModel";
+import { orderSchema } from "@/app/lib/orderModel";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
@@ -10,18 +10,17 @@ async function connectToDatabase() {
   }
 }
 
-export async function POST(request) {
+export async function POST(request, response) {
   try {
     let payload = await request.json();
     let result;
     let success = false;
-
-    const food = new foodSchema(payload);
-    result = await food.save();
+    await connectToDatabase();
+    const user = new orderSchema(payload);
+    result = await user.save();
     if (result) {
       success = true;
     }
-    await connectToDatabase();
     return NextResponse.json({ result, success });
   } catch (error) {
     console.error("Error in POST request:", error);
