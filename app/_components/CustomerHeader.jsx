@@ -4,9 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 
-const CustomerHeader = (props) => {
-  const userStorage = JSON.parse(localStorage?.getItem("user"));
-  const cartStorage = JSON.parse(localStorage?.getItem("cart"));
+const CustomerHeader = (props) => { 
+  const userStorage =
+    localStorage?.getItem("user") && JSON.parse(localStorage?.getItem("user"));
+  const cartStorage =
+    localStorage?.getItem("cart") && JSON.parse(localStorage?.getItem("cart"));
   const [user, setUser] = useState(userStorage ? userStorage : undefined);
   const [cartNumber, setCartNumber] = useState(cartStorage?.length);
   const [cartItem, setCartItem] = useState(cartStorage);
@@ -36,21 +38,29 @@ const CustomerHeader = (props) => {
   }, [props?.cartData]);
 
   useEffect(() => {
-    if (props.removeCartData) {
-      let localCartItem = cartItem.filter((item) => {
-        return item._id != props.removeCartData;
+    if (props?.removeCartData) {
+      let localCartItem = cartItem?.filter((item) => {
+        return item?._id != props?.removeCartData;
       });
       setCartItem(localCartItem);
       setCartNumber(cartNumber - 1);
-      localStorage.setItem("cart", JSON.stringify(localCartItem));
-      if (localCartItem.length == 0) {
-        localStorage.removeItem("cart");
+      localStorage?.setItem("cart", JSON.stringify(localCartItem));
+      if (localCartItem?.length == 0) {
+        localStorage?.removeItem("cart");
       }
     }
-  }, [props.removeCartData]);
+  }, [props?.removeCartData]);
+
+  useEffect(() => {
+    if (props?.removeCartData) {
+      setCartItem([]);
+      setCartNumber(0);
+      localStorage?.removeItem("cart");
+    }
+  }, [props?.removeCartData]);
 
   const logout = () => {
-    localStorage.removeItem("user");
+    localStorage?.removeItem("user");
     setUser(null);
     router.push("/");
   };
@@ -63,7 +73,7 @@ const CustomerHeader = (props) => {
           <Link href="/">Home</Link>
           {user ? (
             <>
-              <Link href="/#">{user?.name}</Link>
+              <Link href="/myprofile">{user?.name}</Link>
               <button
                 className="no-underline bg-transparent border-none bg-blue-500  cursor-pointer"
                 onClick={logout}
@@ -81,6 +91,7 @@ const CustomerHeader = (props) => {
             Cart({cartNumber ? cartNumber : 0})
           </Link>
           <Link href="/">Add Restaurant</Link>
+          <Link href="/deliverypartner">Delivery Partner</Link>
         </li>
       </ul>
     </div>

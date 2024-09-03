@@ -5,17 +5,16 @@ import RestaurantFooter from "../_components/RestaurantFooter";
 import UserSignUp from "../_components/UserSignUp";
 import UserLogin from "../_components/UserLogin";
 
-const Page = (props) => {
-  console.log("🚀 ~ Page ~ props:", props);
+const Userauth = (props) => {
   const [login, setLogin] = useState(true);
   return (
     <>
       <div className="text-center">
         <CustomerHeader />
         {login ? (
-          <UserLogin redirect={props.serachParams} />
+          <UserLogin redirect={props?.serachParams} />
         ) : (
-          <UserSignUp redirect={props.serachParams} />
+          <UserSignUp redirect={props?.serachParams} />
         )}
         <div>
           <button className="button-link" onClick={() => setLogin(!login)}>
@@ -30,4 +29,4 @@ const Page = (props) => {
   );
 };
 
-export default Page;
+export default Userauth;

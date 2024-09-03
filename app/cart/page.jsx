@@ -9,18 +9,18 @@ import { useRouter } from "next/navigation";
 const Page = () => {
   const router = useRouter();
   const [cartStorage, setCartStorage] = useState(
-    JSON.parse(localStorage.getItem("cart"))
+    localStorage?.getItem("cart") && JSON.parse(localStorage?.getItem("cart"))
   );
   const [total] = useState(() =>
-    cartStorage.length == 1
-      ? cartStorage[0].price
-      : cartStorage.reduce((a, b) => {
+    cartStorage?.length == 1
+      ? cartStorage[0]?.price
+      : cartStorage?.reduce((a, b) => {
           return a.price + b.price;
         })
   );
 
   const orderNow = () => {
-    JSON.parse(localStorage.getItem("user"))
+    localStorage?.getItem("user") && JSON.parse(localStorage?.getItem("user"))
       ? router.push("/order")
       : router.push("/user-auth?order=true");
   };

@@ -22,8 +22,8 @@ export default function Home() {
       let response = await fetch(
         `http://localhost:3000/api/customer/locations`
       );
-      response = await response.json();
-      response.success ? setLocations(response.result) : null;
+      response = await response?.json();
+      response?.success ? setLocations(response?.result) : null;
     } catch (error) {
       console.error("Error loading locations:", error);
     }
@@ -33,14 +33,14 @@ export default function Home() {
     try {
       let url = `http://localhost:3000/api/customer`;
       url += params?.location
-        ? `?location=${params.location}`
+        ? `?location=${params?.location}`
         : params?.restaurant
-        ? `?restaurant=${params.restaurant}`
+        ? `?restaurant=${params?.restaurant}`
         : "";
 
       let response = await fetch(url);
-      response = await response.json();
-      response.success ? setRestaurants(response.result) : null;
+      response = await response?.json();
+      response?.success ? setRestaurants(response?.result) : null;
     } catch (error) {
       console.error("Error loading restaurants:", error);
     }
@@ -75,7 +75,7 @@ export default function Home() {
           />
           {showLocation && (
             <ul className="text-black text-left absolute bg-white border w-1/4 mt-2 z-10 max-h-48 overflow-y-auto">
-              {locations.map((item, index) => (
+              {locations?.map((item, index) => (
                 <li
                   className="cursor-pointer p-2 hover:bg-gray-200"
                   key={index}
@@ -96,22 +96,22 @@ export default function Home() {
         </div>
 
         <div className="justify-center flex flex-row flex-wrap mt-10 mb-12">
-          {restaurants.map((item, index) => (
+          {restaurants?.map((item, index) => (
             <div
               className="w-5/12 bg-orange-400 m-2 p-2 border rounded cursor-pointer text-black font-medium"
               key={index}
               onClick={() =>
-                router.push("explore/" + item.name + "?id=" + item._id)
+                router.push("explore/" + item?.name + "?id=" + item?._id)
               }
             >
               <div className="pl-4 flex text-lg font-bold space-x-4">
-                <h3>{item.name}</h3>
-                <h5>Contact: {item.contact}</h5>
+                <h3>{item?.name}</h3>
+                <h5>Contact: {item?.contact}</h5>
               </div>
               <div className="pl-4 mt-2">
-                <div>{item.city},</div>
+                <div>{item?.city},</div>
                 <div>
-                  {item.address}, Email: {item.email}
+                  {item?.address}, Email: {item?.email}
                 </div>
               </div>
             </div>

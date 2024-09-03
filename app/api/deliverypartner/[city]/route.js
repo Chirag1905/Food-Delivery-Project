@@ -1,4 +1,6 @@
 import { connectionStr } from "@/app/lib/db";
+import { deliveryPartnerSchema } from "@/app/lib/deliverypartnerModel";
+import { orderSchema } from "@/app/lib/orderModel";
 import { restaurantSchema } from "@/app/lib/restaurantsModel";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
@@ -13,12 +15,10 @@ async function connectToDatabase() {
 export async function GET(request, response) {
   try {
     await connectToDatabase();
+    let city = request.params.city;
     let success = false;
-    let result = await restaurantSchema.find();
-    result = result.map(
-      (item) => item.city.charAt(0).toUpperCase() + item.city.slice(1)
-    );
-    result = [...new Set(result.map((item) => item))];
+    let fliter = { city: { $regex: new RegExp(city, "i") } };
+    const result = await deliveryPartnerSchema.find(fliter);
     if (result) {
       success = true;
     }

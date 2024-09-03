@@ -5,18 +5,18 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 const Page = (props) => {
-  const name = props.params.name;
+  const name = props?.params?.name;
   const [restaurantDetails, setRestaurantDetails] = useState();
   const [foodItemsDetails, setFootItemsDetails] = useState([]);
   const [cartData, setCartData] = useState();
-  const [cartStorage, setCartStorage] = useState(
-    JSON.parse(localStorage.getItem("cart"))
+  const [cartStorage] = useState(
+    localStorage?.getItem("cart") && JSON.parse(localStorage?.getItem("cart"))
   );
   const [cartIds, setCartIDs] = useState(
     cartStorage
       ? () =>
-          cartStorage.map((item) => {
-            return item._id;
+          cartStorage?.map((item) => {
+            return item?._id;
           })
       : []
   );
@@ -28,13 +28,13 @@ const Page = (props) => {
 
   const loadRestaurantsDetails = async () => {
     try {
-      const id = props.searchParams.id;
+      const id = props?.searchParams?.id;
       let response = await fetch(`http://localhost:3000/api/customer/${id}`);
-      response = await response.json();
-      response.success
+      response = await response?.json();
+      response?.success
         ? (() => {
-            setRestaurantDetails(response.details);
-            setFootItemsDetails(response.foodItems);
+            setRestaurantDetails(response?.details);
+            setFootItemsDetails(response?.foodItems);
           })()
         : "";
     } catch (error) {
@@ -44,12 +44,12 @@ const Page = (props) => {
 
   const addToCart = (item) => {
     let localCartIds = cartIds;
-    localCartIds.push(item._id);
+    localCartIds?.push(item?._id);
     setCartIDs(localCartIds);
     setCartData(item);
     setRemoveCartData();
   };
-  
+
   const removeFromCart = (id) => {
     setRemoveCartData(id);
     let localIds = cartIds.filter((item) => item != id);
@@ -103,10 +103,10 @@ const Page = (props) => {
                 <div className="description font-light">
                   {item?.description}
                 </div>
-                {cartIds.includes(item._id) ? (
+                {cartIds.includes(item?._id) ? (
                   <button
                     className="text-white border-none bg-orange-400 p-1 rounded cursor-pointer"
-                    onClick={() => removeFromCart(item._id)}
+                    onClick={() => removeFromCart(item?._id)}
                   >
                     Remove From Cart
                   </button>

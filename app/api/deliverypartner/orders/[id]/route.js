@@ -14,10 +14,9 @@ async function connectToDatabase() {
 export async function GET(request, response) {
   try {
     await connectToDatabase();
-    let result;
     let success = false;
-    const userId = request.nextUrl.searchParams.get("id");
-    result = await orderSchema.find({ user_id: userId });
+    let id = request.params.id;
+    let result = await orderSchema.find({ deliveryBoy_id: id });
     if (result) {
       let restoData = await Promise.all(
         result.map(async (item) => {
@@ -44,14 +43,13 @@ export async function POST(request, response) {
   try {
     await connectToDatabase();
     let payload = await request.json();
-    let result;
     let success = false;
-    const orderObj = new orderSchema(payload);
-    result = await orderObj.save();
+    const user = new orderSchema(payload);
+    const result = await user.save();
     if (result) {
       success = true;
     }
-    return NextResponse.json({ result, success });
+    return NextResponse.json({ success, result });
   } catch (error) {
     console.error("Error in POST request:", error);
     return NextResponse.json({ success: false, error: error.message });

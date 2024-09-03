@@ -4,10 +4,26 @@ import { restaurantSchema } from "@/app/lib/restaurantsModel";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
+async function connectToDatabase() {
+  if (mongoose.connection.readyState === 0) {
+    await mongoose.connect(connectionStr);
+    console.log("Connected to MongoDB");
+  }
+}
+
 export async function GET(request, response) {
-  const id = response.params.id;
-  await mongoose.connect(connectionStr);
-  let details = await restaurantSchema.findOne({ _id: id });
-  const foodItems = await foodSchema.find({ resto_id: id });
-  return NextResponse.json({ details, foodItems, success: true });
+  try {
+    await connectToDatabase();
+    const id = response.params.id;
+    let success = false;
+    const details = await restaurantSchema.findOne({ _id: id });
+    const foodItems = await foodSchema.find({ resto_id: id });
+    if (details && foodItems) {
+      success = true;
+    }
+    return NextResponse.json({ success, details, foodItems });
+  } catch (error) {
+    console.error("Error in GET request:", error);
+    return NextResponse.json({ success: false, error: error.message });
+  }
 }

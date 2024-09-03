@@ -1,3 +1,4 @@
+"use client";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -6,7 +7,7 @@ const RestaurantLogin = () => {
   const router = useRouter();
   const {
     register,
-    handleSubmit, 
+    handleSubmit,
     setError,
     clearErrors,
     formState: { errors },
@@ -16,18 +17,18 @@ const RestaurantLogin = () => {
     let response = await fetch("http://localhost:3000/api/restaurant", {
       method: "POST",
       body: JSON.stringify({
-        email: data.email,
-        password: data.password,
+        email: data?.email,
+        password: data?.password,
         login: true,
       }),
     });
 
-    response = await response.json();
-    response.success
+    response = await response?.json();
+    response?.success
       ? (() => {
           const { result } = response;
-          delete result.password;
-          localStorage.setItem("restaurantUser", JSON.stringify(result));
+          delete result?.password;
+          localStorage?.setItem("restaurantUser", JSON.stringify(result));
           router.push("/restaurant/dashboard");
         })()
       : alert("Login Failed");

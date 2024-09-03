@@ -16,7 +16,7 @@ const UserSignUp = (props) => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    if (data.password !== data.c_password) {
+    if (data?.password !== data?.c_password) {
       setError("c_password", {
         type: "manual",
         message: "Passwords do not match",
@@ -29,12 +29,12 @@ const UserSignUp = (props) => {
     let response = await fetch("http://localhost:3000/api/user", {
       method: "POST",
       body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        city: data.city,
-        address: data.address,
-        contact: data.contact,
+        name: data?.name,
+        email: data?.email,
+        password: data?.password,
+        city: data?.city,
+        address: data?.address,
+        contact: data?.contact,
       }),
     });
 
@@ -43,8 +43,8 @@ const UserSignUp = (props) => {
       ? (() => {
           alert("Registration Successfull");
           const { result } = response;
-          delete result.password;
-          localStorage.setItem("user", JSON.stringify(result));
+          delete result?.password;
+          localStorage?.setItem("user", JSON.stringify(result));
           props?.redirect?.order ? router.push("/order") : router.push("/");
         })()
       : alert("Registration Failed");

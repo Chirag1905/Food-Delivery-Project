@@ -1,3 +1,4 @@
+"use client";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -16,8 +17,8 @@ const UserLogin = (props) => {
     let response = await fetch("http://localhost:3000/api/user", {
       method: "POST",
       body: JSON.stringify({
-        email: data.email,
-        password: data.password,
+        email: data?.email,
+        password: data?.password,
         login: true,
       }),
     });
@@ -26,8 +27,8 @@ const UserLogin = (props) => {
     response.success
       ? (() => {
           const { result } = response;
-          delete result.password;
-          localStorage.setItem("user", JSON.stringify(result));
+          delete result?.password;
+          localStorage?.setItem("user", JSON.stringify(result));
           props?.redirect?.order ? router.push("/") : router.push("/order");
         })()
       : alert(

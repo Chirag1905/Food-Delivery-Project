@@ -10,7 +10,7 @@ const RestaurantHeader = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    const data = localStorage.getItem("restaurantUser");
+    const data = localStorage?.getItem("restaurantUser");
 
     !data && pathname === "/restaurant/dashboard"
       ? router.push("/restaurant")

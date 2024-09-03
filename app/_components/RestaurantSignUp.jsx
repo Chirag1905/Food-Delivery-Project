@@ -1,3 +1,4 @@
+"use client";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -13,7 +14,7 @@ const RestaurantSignUp = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    if (data.password !== data.c_password) {
+    if (data?.password !== data?.c_password) {
       setError("c_password", {
         type: "manual",
         message: "Passwords do not match",
@@ -26,21 +27,21 @@ const RestaurantSignUp = () => {
     let response = await fetch("http://localhost:3000/api/restaurant", {
       method: "POST",
       body: JSON.stringify({
-        email: data.email,
-        password: data.password,
-        name: data.name,
-        city: data.city,
-        address: data.address,
-        contact: data.contact,
+        email: data?.email,
+        password: data?.password,
+        name: data?.name,
+        city: data?.city,
+        address: data?.address,
+        contact: data?.contact,
       }),
     });
 
-    response = await response.json();
-    response.success
+    response = await response?.json();
+    response?.success
       ? (() => {
           const { result } = response;
-          delete result.password;
-          localStorage.setItem("restaurantUser", JSON.stringify(result));
+          delete result?.password;
+          localStorage?.setItem("restaurantUser", JSON.stringify(result));
           router.push("/restaurant/dashboard");
         })()
       : alert("Registration Failed");

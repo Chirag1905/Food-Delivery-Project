@@ -10,19 +10,17 @@ async function connectToDatabase() {
   }
 }
 
-export async function POST(request) {
+export async function POST(request, response) {
   try {
+    await connectToDatabase();
     let payload = await request.json();
-    let result;
     let success = false;
-
     const food = new foodSchema(payload);
-    result = await food.save();
+    const result = await food.save();
     if (result) {
       success = true;
     }
-    await connectToDatabase();
-    return NextResponse.json({ result, success });
+    return NextResponse.json({ success, result });
   } catch (error) {
     console.error("Error in POST request:", error);
     return NextResponse.json({ success: false, error: error.message });

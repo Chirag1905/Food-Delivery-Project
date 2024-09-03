@@ -1,5 +1,5 @@
 import { connectionStr } from "@/app/lib/db";
-import { restaurantSchema } from "@/app/lib/restaurantsModel";
+import { deliveryPartnerSchema } from "@/app/lib/deliverypartnerModel";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
@@ -10,39 +10,23 @@ async function connectToDatabase() {
   }
 }
 
-export async function GET() {
-  try {
-    await connectToDatabase();
-    let success = false;
-    const result = await restaurantSchema.find();
-    if (result) {
-      success = true;
-    }
-    return NextResponse.json({ success, result });
-  } catch (error) {
-    console.error("Error in GET request:", error);
-    return NextResponse.json({ success: false, error: error.message });
-  }
-}
-
-export async function POST(request) {
+export async function POST(request, response) {
   try {
     await connectToDatabase();
     let payload = await request.json();
     let result;
     let success = false;
-
     if (payload.login) {
-      result = await restaurantSchema.findOne({
-        email: payload.email,
+      let result = await deliveryPartnerSchema.findOne({
+        contact: payload.contact,
         password: payload.password,
       });
       if (result) {
         success = true;
       }
     } else {
-      const restaurant = new restaurantSchema(payload);
-      result = await restaurant.save();
+      const deliveryPartner = new deliveryPartnerSchema(payload);
+      result = await deliveryPartner.save();
       if (result) {
         success = true;
       }

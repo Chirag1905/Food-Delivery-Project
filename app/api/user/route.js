@@ -15,9 +15,7 @@ export async function POST(request, response) {
     let payload = await request.json();
     let result;
     let success = false;
-
     await connectToDatabase();
-
     if (payload.login) {
       result = await usersSchema.findOne({
         email: payload.email,
