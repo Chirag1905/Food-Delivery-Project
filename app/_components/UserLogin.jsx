@@ -1,4 +1,5 @@
 "use client";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -14,22 +15,19 @@ const UserLogin = (props) => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    let response = await fetch("http://localhost:3000/api/user", {
-      method: "POST",
-      body: JSON.stringify({
-        email: data?.email,
-        password: data?.password,
-        login: true,
-      }),
+    let response = await axios.post("http://localhost:3000/api/user", {
+      email: data?.email,
+      password: data?.password,
+      login: true,
     });
 
-    response = await response.json();
+    response = await response?.data;
     response.success
       ? (() => {
           const { result } = response;
           delete result?.password;
           localStorage?.setItem("user", JSON.stringify(result));
-          props?.redirect?.order ? router.push("/") : router.push("/order");
+          props?.redirect?.order ? router.push("/order") : router.push("/");
         })()
       : alert(
           "Failed to Login. Please try again with valid email and password"

@@ -1,4 +1,5 @@
 "use client";
+import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
@@ -18,23 +19,20 @@ const FoodItemList = () => {
   resturantData ? (resto_id = resturantData?._id) : null;
 
   const loadFoodItems = async () => {
-    let response = await fetch(
+    let response = await axios.get(
       `http://localhost:3000/api/restaurant/foods/${resto_id}`
     );
-    response = await response?.json();
+    response = await response?.data;
     response?.success
       ? setFoodItems(response?.result)
       : console.error("Error fetching food items");
   };
 
   const deleteFoodItem = async (id) => {
-    let response = await fetch(
-      `http://localhost:3000/api/restaurant/foods/${id}`,
-      {
-        method: "DELETE",
-      }
+    let response = await axios.delete(
+      `http://localhost:3000/api/restaurant/foods/${id}`
     );
-    response = await response?.json();
+    response = await response?.data;
     response?.success ? loadFoodItems() : alert("food item not deleted");
   };
   return (

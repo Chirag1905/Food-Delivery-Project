@@ -2,19 +2,20 @@
 import React, { useEffect, useState } from "react";
 import DeliveryHeader from "../_components/DeliveryHeader";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const DeliveryDashboard = () => {
-  const router = useRouter();
   const [ordersList, setOrdersList] = useState([]);
+  const router = useRouter();
+
   const getMyOrders = async () => {
     const deliveryData =
       localStorage?.getItem("delivery") &&
       JSON.parse(localStorage?.getItem("delivery"));
-    let response = await fetch(
+    let response = await axios.get(
       `http://localhost:3000/api/deliverypartner/orders/${deliveryData?._id}`
     );
-    response = await response?.json();
-    console.log("🚀 ~ getMyOrders ~ response:", response)
+    response = await response?.data;
     response.success ? setOrdersList(response?.result) : null;
   };
 

@@ -4,6 +4,7 @@ import CustomerHeader from "../_components/CustomerHeader";
 import RestaurantFooter from "../_components/RestaurantFooter";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const UserSignUp = (props) => {
   const router = useRouter();
@@ -26,19 +27,16 @@ const UserSignUp = (props) => {
       clearErrors("c_password");
     }
 
-    let response = await fetch("http://localhost:3000/api/user", {
-      method: "POST",
-      body: JSON.stringify({
-        name: data?.name,
-        email: data?.email,
-        password: data?.password,
-        city: data?.city,
-        address: data?.address,
-        contact: data?.contact,
-      }),
+    let response = await axios.post("http://localhost:3000/api/user", {
+      name: data?.name,
+      email: data?.email,
+      password: data?.password,
+      city: data?.city,
+      address: data?.address,
+      contact: data?.contact,
     });
 
-    response = await response.json();
+    response = await response?.data;
     response.success
       ? (() => {
           alert("Registration Successfull");

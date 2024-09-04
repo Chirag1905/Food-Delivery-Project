@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import DeliveryHeader from "../_components/DeliveryHeader";
+import axios from "axios";
 
 const DeliveryPartner = () => {
   const router = useRouter();
@@ -23,16 +24,16 @@ const DeliveryPartner = () => {
   } = useForm();
 
   const handleLogin = async (data) => {
-    let response = await fetch("http://localhost:3000/api/deliverypartner", {
-      method: "POST",
-      body: JSON.stringify({
+    let response = await axios.post(
+      "http://localhost:3000/api/deliverypartner",
+      {
         contact: data?.loginMobile,
         password: data?.loginpassword,
         login: true,
-      }),
-    });
+      }
+    );
 
-    response = await response?.json();
+    response = await response?.data;
     response?.success
       ? (() => {
           const { result } = response;
@@ -56,18 +57,18 @@ const DeliveryPartner = () => {
       clearSignupErrors("c_password");
     }
 
-    let response = await fetch("http://localhost:3000/api/deliverypartner", {
-      method: "POST",
-      body: JSON.stringify({
+    let response = await axios.post(
+      "http://localhost:3000/api/deliverypartner",
+      {
         name: data?.name,
         contact: data?.registerMobile,
         password: data?.registerPassword,
         city: data?.city,
         address: data?.address,
-      }),
-    });
+      }
+    );
 
-    response = await response?.json();
+    response = await response?.data;
     response?.success
       ? (() => {
           alert("Registration Successful");

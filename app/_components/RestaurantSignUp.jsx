@@ -1,4 +1,5 @@
 "use client";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -24,19 +25,16 @@ const RestaurantSignUp = () => {
       clearErrors("c_password");
     }
 
-    let response = await fetch("http://localhost:3000/api/restaurant", {
-      method: "POST",
-      body: JSON.stringify({
-        email: data?.email,
-        password: data?.password,
-        name: data?.name,
-        city: data?.city,
-        address: data?.address,
-        contact: data?.contact,
-      }),
+    let response = await axios.post("http://localhost:3000/api/restaurant", {
+      email: data?.email,
+      password: data?.password,
+      name: data?.name,
+      city: data?.city,
+      address: data?.address,
+      contact: data?.contact,
     });
 
-    response = await response?.json();
+    response = await response?.data;
     response?.success
       ? (() => {
           const { result } = response;

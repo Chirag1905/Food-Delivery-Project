@@ -1,6 +1,7 @@
 "use client";
 import CustomerHeader from "@/app/_components/CustomerHeader";
 import RestaurantFooter from "@/app/_components/RestaurantFooter";
+import axios from "axios";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
@@ -29,15 +30,17 @@ const Page = (props) => {
   const loadRestaurantsDetails = async () => {
     try {
       const id = props?.searchParams?.id;
-      let response = await fetch(`http://localhost:3000/api/customer/${id}`);
-      response = await response?.json();
+      let response = await axios.get(
+        `http://localhost:3000/api/customer/${id}`
+      );
+      response = await response?.data;
       response?.success
         ? (() => {
             setRestaurantDetails(response?.details);
             setFootItemsDetails(response?.foodItems);
           })()
         : "";
-    } catch (error) {
+    } catch (error) { 
       console.log("error:", error);
     }
   };

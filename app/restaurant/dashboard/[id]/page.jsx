@@ -1,4 +1,5 @@
 "use client";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -18,10 +19,10 @@ const EditFoodItem = (props) => {
   }, []);
 
   const handleLoadFoodItem = async () => {
-    let response = await fetch(
+    let response = await axios.get(
       `http://localhost:3000/api/restaurant/foods/edit/${props?.params?.id}`
     );
-    response = await response?.json();?
+    response = await response?.data;
     response?.success
       ? (setValue("food_name", response?.result?.name),
         setValue("price", response?.result?.price),
@@ -31,22 +32,19 @@ const EditFoodItem = (props) => {
   };
 
   const handleEditFoodItem = async (data) => {
-    let response = await fetch(
+    let response = await axios.put(
       `http://localhost:3000/api/restaurant/foods/edit/${props?.params?.id}`,
       {
-        method: "PUT",
-        body: JSON.stringify({
-          name: data?.food_name,
-          price: data?.price,
-          img_path: data?.path,
-          description: data?.description,
-        }),
+        name: data?.food_name,
+        price: data?.price,
+        img_path: data?.path,
+        description: data?.description,
       }
-     );
-    response = await response?.json();
+    );
+    response = await response?.data;
     response?.success
-    ? router.push("../dashboard")
-    : alert("Data is not updated");
+      ? router.push("../dashboard")
+      : alert("Data is not updated");
   };
   return (
     <>

@@ -1,45 +1,51 @@
 "use client";
+import { useState, useEffect } from "react";
 import CustomerHeader from "./_components/CustomerHeader";
 import RestaurantFooter from "./_components/RestaurantFooter";
 import { useForm } from "react-hook-form";
-import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function Home() {
   const { register, setValue } = useForm();
   const [locations, setLocations] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
   const [showLocation, setShowLocation] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    loadLocations();
-    loadRestaurants();
+    setIsClient(true);
+    const fetchData = async () => {
+      await loadLocations();
+      await loadRestaurants();
+    };
+    fetchData();
   }, []);
 
   const loadLocations = async () => {
     try {
-      let response = await fetch(
-        `http://localhost:3000/api/customer/locations`
+      let response = await axios.get(
+        "http://localhost:3000/api/customer/locations"
       );
-      response = await response?.json();
+      response = response?.data;
       response?.success ? setLocations(response?.result) : null;
     } catch (error) {
       console.error("Error loading locations:", error);
     }
   };
 
-  const loadRestaurants = async (params) => {
+  const loadRestaurants = async (params = {}) => {
     try {
-      let url = `http://localhost:3000/api/customer`;
-      url += params?.location
-        ? `?location=${params?.location}`
-        : params?.restaurant
-        ? `?restaurant=${params?.restaurant}`
-        : "";
+      let url = "http://localhost:3000/api/customer";
+      if (params.location) {
+        url += `?location=${params.location}`;
+      } else if (params.restaurant) {
+        url += `?restaurant=${params.restaurant}`;
+      }
 
-      let response = await fetch(url);
-      response = await response?.json();
+      let response = await axios.get(url);
+      response = response.data;
       response?.success ? setRestaurants(response?.result) : null;
     } catch (error) {
       console.error("Error loading restaurants:", error);
@@ -52,6 +58,9 @@ export default function Home() {
     loadRestaurants({ location: item });
   };
 
+  if (!isClient) {
+    return null;
+  }
   return (
     <>
       <CustomerHeader />
@@ -62,9 +71,7 @@ export default function Home() {
             "url('https://a.storyblok.com/f/88809/1150x450/30a9c4f9a6/igevia_header_fastfood01_450.jpg')",
         }}
       >
-        <h1 className="font-bold text-center text-4xl m-4">
-          Food Delivery App
-        </h1>
+        <h1 className="font-bold text-center text-4xl m-4">Hungry Hub</h1>
         <div className="bg-white p-1 border rounded m-auto w-3/5 text-black relative">
           <input
             type="text"
@@ -75,7 +82,7 @@ export default function Home() {
           />
           {showLocation && (
             <ul className="text-black text-left absolute bg-white border w-1/4 mt-2 z-10 max-h-48 overflow-y-auto">
-              {locations?.map((item, index) => (
+              {locations.map((item, index) => (
                 <li
                   className="cursor-pointer p-2 hover:bg-gray-200"
                   key={index}
@@ -96,22 +103,22 @@ export default function Home() {
         </div>
 
         <div className="justify-center flex flex-row flex-wrap mt-10 mb-12">
-          {restaurants?.map((item, index) => (
+          {restaurants.map((item, index) => (
             <div
               className="w-5/12 bg-orange-400 m-2 p-2 border rounded cursor-pointer text-black font-medium"
               key={index}
               onClick={() =>
-                router.push("explore/" + item?.name + "?id=" + item?._id)
+                router.push("explore/" + item.name + "?id=" + item._id)
               }
             >
               <div className="pl-4 flex text-lg font-bold space-x-4">
-                <h3>{item?.name}</h3>
-                <h5>Contact: {item?.contact}</h5>
+                <h3>{item.name}</h3>
+                <h5>Contact: {item.contact}</h5>
               </div>
               <div className="pl-4 mt-2">
-                <div>{item?.city},</div>
+                <div>{item.city},</div>
                 <div>
-                  {item?.address}, Email: {item?.email}
+                  {item.address}, Email: {item.email}
                 </div>
               </div>
             </div>

@@ -35,7 +35,7 @@ const RestaurantHeader = () => {
         <li className="no-underline space-x-5">
           {details ? (
             <>
-              <Link href="/">Profile</Link>
+              {/* <Link href="/">Profile</Link> */}
               <button
                 className="no-underline bg-transparent border-none bg-blue-500  cursor-pointer"
                 onClick={logout}

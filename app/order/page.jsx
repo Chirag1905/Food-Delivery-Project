@@ -2,28 +2,39 @@
 import React, { useEffect, useState } from "react";
 import CustomerHeader from "../_components/CustomerHeader";
 import RestaurantFooter from "../_components/RestaurantFooter";
-import Image from "next/image";
 import { DELIVERY_CHARGES, TAX } from "../lib/constant";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const Order = () => {
   const router = useRouter();
   const [removeCartData, setRemoveCartData] = useState(false);
-  const [userStorage, setUserStorage] = useState(
-    localStorage?.getItem("user") && JSON.parse(localStorage?.getItem("user"))
-  );
-  const [cartStorage, setCartStorage] = useState(
-    localStorage?.getItem("cart") && JSON.parse(localStorage?.getItem("cart"))
-  );
-  const [total] = useState(() =>
-    cartStorage?.length == 1
-      ? cartStorage[0]?.price
-      : cartStorage?.reduce((a, b) => {
-          return a.price + b.price;
-        })
-  );
+  const [userStorage, setUserStorage] = useState(null);
+  const [cartStorage, setCartStorage] = useState(null);
+  const [total, setTotal] = useState(0);
+  const [isClient, setIsClient] = useState(false);
 
+  useEffect(() => {
+    setIsClient(true);
+    const user = localStorage.getItem("user");
+    const cart = localStorage.getItem("cart");
+
+    if (user) {
+      setUserStorage(JSON.parse(user));
+    }
+    if (cart) {
+      const parsedCart = JSON.parse(cart);
+      setCartStorage(parsedCart);
+      const calculatedTotal =
+        parsedCart.length === 1
+          ? parsedCart[0]?.price
+          : parsedCart.reduce((a, b) => a + b.price, 0);
+      setTotal(calculatedTotal);
+    }
+  }, []);
   const orderNow = async () => {
+    if (!isClient) return;
+  
     let user_id =
       localStorage?.getItem("user") &&
       JSON.parse(localStorage?.getItem("user"))._id;
@@ -34,41 +45,114 @@ const Order = () => {
       localStorage?.getItem("cart") &&
       JSON.parse(localStorage?.getItem("cart"));
     let foodItemIds = cart?.map((item) => item?._id).toString();
-    let deliveryBoyResponse = await fetch(
-      `http://localhost:3000/api/deliverypartner/${city}`
-    );
-    deliveryBoyResponse = await deliveryBoyResponse?.json();
-    let deliveryBoyIds = deliveryBoyResponse?.result?.map((item) => item?._id);
-    let deliveryBoy_id =
-      deliveryBoyIds[Math?.floor(Math?.random() * deliveryBoyIds?.length)];
-    !deliveryBoy_id ? alert("Delivery Partner Not available") : false;
-    // let deliveryBoy_id = "66cf1fad3add29dc036e6f2b";
-    let resto_id = cart[0]?.resto_id;
-    let collection = {
-      user_id,
-      resto_id,
-      foodItemIds,
-      deliveryBoy_id,
-      status: "confirm",
-      amount: total + DELIVERY_CHARGES + (total * TAX) / 100,
-    };
-    let response = await fetch("http://localhost:3000/api/order", {
-      method: "POST",
-      body: JSON.stringify(collection),
-    });
-    response = await response?.json();
-    response?.success
-      ? (() => {
-          alert("order confirmed");
-          setRemoveCartData(true);
-          router.push("/myprofile");
-        })()
-      : alert("order failed");
+  
+    try {
+      let deliveryBoyResponse = await axios.get(
+        `http://localhost:3000/api/deliverypartner/${city}`
+      );
+      let deliveryBoyIds = deliveryBoyResponse?.data?.result?.map((item) => item?._id);
+  
+      // Debugging logs
+      console.log("Delivery Boy IDs:", deliveryBoyIds);
+  
+      // Safeguard to check if deliveryBoyIds is valid
+      if (!deliveryBoyIds || deliveryBoyIds.length === 0) {
+        alert("Delivery Partner Not available");
+        return;
+      }
+  
+      let deliveryBoy_id =
+        deliveryBoyIds[Math.floor(Math.random() * deliveryBoyIds.length)];
+        
+      let resto_id = cart[0]?.resto_id;
+      let collection = {
+        user_id,
+        resto_id,
+        foodItemIds,
+        deliveryBoy_id,
+        status: "confirm",
+        amount: total + DELIVERY_CHARGES + (total * TAX) / 100,
+      };
+      let response = await axios.post(
+        "http://localhost:3000/api/order",
+        collection
+      );
+      response = await response?.data;
+      response?.success
+        ? (() => {
+            alert("Order confirmed");
+            setRemoveCartData(true);
+            router.push("/myprofile");
+          })()
+        : alert("Order failed");
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert("An error occurred while placing the order.");
+    }
   };
+  
+  // const orderNow = async () => {
+  //   if (!isClient) return;
 
-  useEffect(() => {
-    !total ? router.push("/") : null;
-  }, [total]);
+  //   let user_id =
+  //     localStorage?.getItem("user") &&
+  //     JSON.parse(localStorage?.getItem("user"))._id;
+  //   let city =
+  //     localStorage?.getItem("user") &&
+  //     JSON.parse(localStorage?.getItem("user")).city;
+  //   let cart =
+  //     localStorage?.getItem("cart") &&
+  //     JSON.parse(localStorage?.getItem("cart"));
+  //   let foodItemIds = cart?.map((item) => item?._id).toString();
+  //   let deliveryBoyResponse = await axios.get(
+  //     `http://localhost:3000/api/deliverypartner/${city}`
+  //   );
+  //   deliveryBoyResponse = await deliveryBoyResponse?.data;
+  //   let deliveryBoyIds = deliveryBoyResponse?.result?.map((item) => item?._id);
+  //   let deliveryBoy_id =
+  //     deliveryBoyIds[Math?.floor(Math?.random() * deliveryBoyIds?.length)];
+  //   if (!deliveryBoy_id) {
+  //     alert("Delivery Partner Not available");
+  //     return;
+  //   }
+
+  //   let resto_id = cart[0]?.resto_id;
+  //   let collection = {
+  //     user_id,
+  //     resto_id,
+  //     foodItemIds,
+  //     deliveryBoy_id,
+  //     status: "confirm",
+  //     amount: total + DELIVERY_CHARGES + (total * TAX) / 100,
+  //   };
+  //   let response = await axios.post(
+  //     "http://localhost:3000/api/order",
+  //     collection
+  //   );
+  //   response = await response?.data;
+  //   response?.success
+  //     ? (() => {
+  //         alert("Order confirmed");
+  //         setRemoveCartData(true);
+  //         router.push("/myprofile");
+  //       })()
+  //     : alert("Order failed");
+  // };
+
+  // useEffect(() => {
+  //   if (total === 0) {
+  //     router.push("/");
+  //   }
+  // }, [total, router]);
+
+  // useEffect(() => {
+  //   !total ? router.push("/") : null;
+  // }, [total]);
+
+  if (!isClient) {
+    return null;
+  }
+
   return (
     <>
       <CustomerHeader removeCartData={removeCartData} />
