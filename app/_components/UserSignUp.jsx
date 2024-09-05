@@ -51,77 +51,149 @@ const UserSignUp = (props) => {
     <>
       <div>
         <h3 className="text-2xl font-semibold">User Registration</h3>
-        <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-          <div className="m-[10px]">
+        <form className="flex flex-col w-1/2" onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-6">
+          <label
+            for="email"
+            className="block mb-2 text-sm font-medium text-gray-900"
+          >
+            Email address
+          </label>
+          <input
+            type="email"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="company@email.com"
+            {...register("email", { required: "Email is required" })}
+          />
+          {errors.email && <p>{errors.email.message}</p>}
+        </div>
+        <div className="mb-6">
+          <label
+            for="password"
+            className="block mb-2 text-sm font-medium text-gray-900 "
+          >
+            Password
+          </label>
+          <input
+            type="password"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="•••••••••"
+            {...register("password", { required: "Password is required" })}
+          />
+          {errors.password && <p>{errors.password.message}</p>}
+        </div>
+
+        <div className="mb-6">
+          <label
+            for="confirm_password"
+            className="block mb-2 text-sm font-medium text-gray-900"
+          >
+            Confirm password
+          </label>
+          <input
+            type="password"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+            placeholder="•••••••••"
+            {...register("c_password", {
+              required: "Confirm Password is required",
+            })}
+          />
+          {errors.c_password && <p>{errors.c_password.message}</p>}
+        </div>
+        <div className="mb-6">
+          <label
+            for="address"
+            className="block mb-2 text-sm font-medium text-gray-900"
+          >
+            Address
+          </label>
+          <textarea
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+            placeholder="Enter Your Restaurant Address"
+            {...register("address", {
+              required: "Address is required",
+            })}
+          />
+          {errors.address && <p>{errors.address.message}</p>}
+        </div>
+        <div className="grid gap-6 mb-6 md:grid-cols-2">
+          <div>
+            <label
+              for="company"
+              className="block mb-2 text-sm font-medium text-gray-900"
+            >
+              Restaurant Name
+            </label>
             <input
               type="text"
-              className="w-[200px] h-[30px]"
-              placeholder="Enter Name"
-              {...register("name", { required: "Name is required" })}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="Flowbite"
+              {...register("name", { required: "Restaurant Name is required" })}
             />
             {errors.name && <p>{errors.name.message}</p>}
           </div>
-          <div className="m-[10px]">
+          <div>
+            <label
+              for="phone"
+              className="block mb-2 text-sm font-medium text-gray-900 "
+            >
+              Phone Number
+            </label>
             <input
-              type="text"
-              className="w-[200px] h-[30px]"
-              placeholder="Enter Email ID"
-              {...register("email", { required: "Email is required" })}
-            />
-            {errors.email && <p>{errors.email.message}</p>}
-          </div>
-          <div className="m-[10px]">
-            <input
-              type="password"
-              className="w-[200px] h-[30px]"
-              placeholder="Enter Your Password"
-              {...register("password", { required: "Password is required" })}
-            />
-            {errors.password && <p>{errors.password.message}</p>}
-          </div>
-          <div className="m-[10px]">
-            <input
-              type="password"
-              className="w-[200px] h-[30px]"
-              placeholder="Enter Confirm Password"
-              {...register("c_password", {
-                required: "Confirm Password is required",
-              })}
-            />
-            {errors.c_password && <p>{errors.c_password.message}</p>}
-          </div>
-          <div className="m-[10px]">
-            <input
-              type="text"
-              className="w-[200px] h-[30px]"
-              placeholder="Enter City Name"
-              {...register("city", { required: "City Name is required" })}
-            />
-            {errors.city && <p>{errors.city.message}</p>}
-          </div>
-          <div className="m-[10px]">
-            <textarea
-              className="w-[200px] h-[30px]"
-              placeholder="Enter Your Address"
-              {...register("address", { required: "Address is required" })}
-            />
-            {errors.address && <p>{errors.address.message}</p>}
-          </div>
-          <div className="m-[10px]">
-            <input
-              type="number"
-              className="w-[200px] h-[30px]"
-              placeholder="Enter Contact Number"
+              type="tel"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="123-45-678"
+              pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
               {...register("contact", {
                 required: "Contact Number is required",
               })}
             />
             {errors.contact && <p>{errors.contact.message}</p>}
           </div>
-          <div className="m-[10px]">
-            <button className="w-[200px] h-[30px]">SignIn</button>
+          <div>
+            <label
+              for="city"
+              className="block mb-2 text-sm font-medium text-gray-900"
+            >
+              City Name
+            </label>
+            <input
+              type="text"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="Enter Your City Name"
+              {...register("city", { required: "City Name is required" })}
+            />
+            {errors.city && <p>{errors.city.message}</p>}
           </div>
-        </form>
+        </div>
+
+        <div className="flex items-start mb-6">
+          <div className="flex items-center h-5">
+            <input
+              type="checkbox"
+              value=""
+              className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 "
+              required
+            />
+          </div>
+          <label
+            for="remember"
+            className="ms-2 text-sm font-medium text-gray-900 "
+          >
+            I agree with the{" "}
+            <a href="#" className="text-blue-600 hover:underline ">
+              terms and conditions
+            </a>
+            .
+          </label>
+        </div>
+        <button
+          type="submit"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
+        >
+          Submit
+        </button>
+      </form>
       </div>
     </>
   );

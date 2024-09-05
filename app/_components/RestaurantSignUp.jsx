@@ -49,89 +49,6 @@ const RestaurantSignUp = () => {
   return (
     <>
       <h3 className="text-2xl font-semibold">Register</h3>
-      <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-        <div className="m-[10px]">
-          <input
-            type="text"
-            className="w-[200px] h-[30px]"
-            placeholder="Enter Email ID"
-            {...register("email", { required: "Email is required" })}
-          />
-          {errors.email && <p>{errors.email.message}</p>}
-        </div>
-        <div className="m-[10px]">
-          <input
-            type="password"
-            className="w-[200px] h-[30px]"
-            placeholder="Enter Your Password"
-            {...register("password", { required: "Password is required" })}
-          />
-          {errors.password && <p>{errors.password.message}</p>}
-        </div>
-        <div className="m-[10px]">
-          <input
-            type="password"
-            className="w-[200px] h-[30px]"
-            placeholder="Enter Confirm Password"
-            {...register("c_password", {
-              required: "Confirm Password is required",
-            })}
-          />
-          {errors.c_password && <p>{errors.c_password.message}</p>}
-        </div>
-        <div className="m-[10px]">
-          <input
-            type="text"
-            className="w-[200px] h-[30px]"
-            placeholder="Enter Your Restaurant Name"
-            {...register("name", { required: "Restaurant Name is required" })}
-          />
-          {errors.name && <p>{errors.name.message}</p>}
-        </div>
-        <div className="m-[10px]">
-          <input
-            type="text"
-            className="w-[200px] h-[30px]"
-            placeholder="Enter City Name"
-            {...register("city", { required: "City Name is required" })}
-          />
-          {errors.city && <p>{errors.city.message}</p>}
-        </div>
-        <div className="m-[10px]">
-          <textarea
-            className="w-[200px] h-[30px]"
-            placeholder="Enter Your Address"
-            {...register("address", { required: "Address is required" })}
-          />
-          {errors.address && <p>{errors.address.message}</p>}
-        </div>
-        <div className="m-[10px]">
-          <input
-            type="number"
-            className="w-[200px] h-[30px]"
-            placeholder="Enter Contact Number"
-            {...register("contact", { required: "Contact Number is required" })}
-          />
-          {errors.contact && <p>{errors.contact.message}</p>}
-        </div>
-        <div className="m-[10px]">
-          <input
-            type="text"
-            className="w-[200px] h-[30px]"
-            placeholder="Enter image path"
-            {...register("logo", {
-              required: "Restaurant Logo is required",
-            })}
-          />
-          {errors.path && <p>{errors.path.message}</p>}
-        </div>
-        <div className="m-[10px]">
-          <button type="submit" className="w-[200px] h-[30px]">
-            SignUp
-          </button>
-        </div>
-      </form>
-
       <form className="flex flex-col w-1/2" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-6">
           <label
@@ -142,7 +59,6 @@ const RestaurantSignUp = () => {
           </label>
           <input
             type="email"
-            id="email"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="company@email.com"
             {...register("email", { required: "Email is required" })}
@@ -158,7 +74,6 @@ const RestaurantSignUp = () => {
           </label>
           <input
             type="password"
-            id="password"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="•••••••••"
             {...register("password", { required: "Password is required" })}
@@ -175,7 +90,6 @@ const RestaurantSignUp = () => {
           </label>
           <input
             type="password"
-            id="confirm_password"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
             placeholder="•••••••••"
             {...register("c_password", {
@@ -192,7 +106,6 @@ const RestaurantSignUp = () => {
             Address
           </label>
           <textarea
-            id="address"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
             placeholder="Enter Your Restaurant Address"
             {...register("address", {
@@ -207,11 +120,10 @@ const RestaurantSignUp = () => {
               for="company"
               className="block mb-2 text-sm font-medium text-gray-900"
             >
-              Company
+              Restaurant Name
             </label>
             <input
               type="text"
-              id="company"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="Flowbite"
               {...register("name", { required: "Restaurant Name is required" })}
@@ -223,11 +135,10 @@ const RestaurantSignUp = () => {
               for="phone"
               className="block mb-2 text-sm font-medium text-gray-900 "
             >
-              Phone number
+              Phone Number
             </label>
             <input
               type="tel"
-              id="phone"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="123-45-678"
               pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
@@ -242,40 +153,38 @@ const RestaurantSignUp = () => {
               for="website"
               className="block mb-2 text-sm font-medium text-gray-900 "
             >
-              Website URL
+              Logo URL
             </label>
             <input
               type="url"
-              id="website"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              placeholder="flowbite.com"
+              placeholder="hungryhub.com"
               {...register("logo", {
                 required: "Restaurant Logo is required",
               })}
             />
-            {errors.path && <p>{errors.path.message}</p>}
+            {errors.logo && <p>{errors.logo.message}</p>}
           </div>
           <div>
             <label
-              for="visitors"
+              for="city"
               className="block mb-2 text-sm font-medium text-gray-900"
             >
-              Unique visitors (per month)
+              City Name
             </label>
             <input
-              type="number"
-              id="visitors"
+              type="text"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              placeholder=""
-              required
+              placeholder="Enter Your City Name"
+              {...register("city", { required: "City Name is required" })}
             />
+            {errors.city && <p>{errors.city.message}</p>}
           </div>
         </div>
 
         <div className="flex items-start mb-6">
           <div className="flex items-center h-5">
             <input
-              id="remember"
               type="checkbox"
               value=""
               className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 "
