@@ -7,6 +7,7 @@ const restaurantModel = new mongoose.Schema({
   address: String,
   city: String,
   contact: String,
+  logo: String,
 });
 
 export const restaurantSchema =
