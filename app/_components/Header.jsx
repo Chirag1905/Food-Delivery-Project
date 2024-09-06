@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 
-const CustomerHeader = (props) => {
+const Header = (props) => {
   const router = useRouter();
   const userStorage =
     localStorage?.getItem("user") && JSON.parse(localStorage?.getItem("user"));
@@ -13,6 +13,18 @@ const CustomerHeader = (props) => {
   const [user, setUser] = useState(userStorage ? userStorage : undefined);
   const [cartNumber, setCartNumber] = useState(cartStorage?.length);
   const [cartItem, setCartItem] = useState(cartStorage);
+  const [details, setDetails] = useState(null);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const data = localStorage?.getItem("restaurantUser");
+
+    !data && pathname === "/restaurant/dashboard"
+      ? router.push("/restaurant")
+      : data && pathname === "/restaurant"
+      ? router.push("/restaurant/dashboard")
+      : setDetails(JSON.parse(data));
+  }, [pathname, router]);
 
   useEffect(() => {
     if (props?.cartData) {
@@ -66,7 +78,9 @@ const CustomerHeader = (props) => {
   };
 
   const navigateTo = (route) => {
-    if (route.params) {
+    if (route.action) {
+      route.action();
+    } else if (route.params) {
       const path = route.path.replace(
         /\[(.*?)\]/g,
         (_, key) => route.params[key]
@@ -79,23 +93,32 @@ const CustomerHeader = (props) => {
 
   const routes = [
     { name: "Home", path: "/" },
-    ...(user
-      ? [
-          { name: user.name, path: "/myprofile" },
-          { name: "Logout", path: "#", action: logout },
-        ]
-      : [
-          { name: "Login", path: "/user-auth" },
-          { name: "Signup", path: "/user-auth" },
-        ]),
-    {
-      name: `Cart(${cartNumber ? cartNumber : 0})`,
-      path: `${cartNumber ? "/cart" : "#"}`,
-    },
+    ...(pathname !== "/restaurant" &&
+    pathname !== "/restaurant/dashboard" &&
+    pathname !== "/deliverypartner"
+      ? user
+        ? [
+            { name: user.name, path: "/myprofile" },
+            { name: "Logout", path: "/", action: logout },
+            {
+              name: `Cart(${cartNumber ? cartNumber : 0})`,
+              path: `${cartNumber ? "/cart" : "#"}`,
+            },
+          ]
+        : [
+            { name: "Login", path: "/user-auth" },
+            { name: "Signup", path: "/user-auth" },
+            {
+              name: `Cart(${cartNumber ? cartNumber : 0})`,
+              path: `${cartNumber ? "/cart" : "#"}`,
+            },
+          ]
+      : []),
   ];
 
   const moreOptions = [
-    { name: "Add Restaurant", path: "/restaurant" },
+    { name: "Dine In Login", path: "/restaurant" },
+    { name: "Dine In Register", path: "/restaurant" },
     { name: "Delivery Partner", path: "/deliverypartner" },
   ];
 
@@ -107,7 +130,7 @@ const CustomerHeader = (props) => {
 
   return (
     <>
-      <nav className="bg-orange-50 border-gray-200 ">
+      <nav className="bg-gray-100 border-gray-200 ">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <Link
             href="/#"
@@ -120,12 +143,16 @@ const CustomerHeader = (props) => {
               width={80}
               height={50}
             />
-            <span className="self-center text-2xl font-semibold whitespace-nowrap ">
-              Hungry Hub
-            </span>
+
+            <h1 className="flex items-center text-4xl font-extrabold">
+              Hungry
+              <span className="bg-blue-100 text-blue-800 text-2xl font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">
+                Hub
+              </span>
+            </h1>
           </Link>
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-            <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-orange-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-orange-50 ">
+            <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-100 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0">
               {routes.map((route, index) => (
                 <li key={index}>
                   <button
@@ -190,4 +217,4 @@ const CustomerHeader = (props) => {
   );
 };
 
-export default CustomerHeader;
+export default Header;

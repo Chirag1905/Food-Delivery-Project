@@ -1,6 +1,6 @@
 "use client";
-import CustomerHeader from "@/app/_components/CustomerHeader";
-import RestaurantFooter from "@/app/_components/RestaurantFooter";
+import Header from "@/app/_components/Header";
+import Footer from "@/app/_components/Footer";
 import axios from "axios";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -61,9 +61,9 @@ const Page = (props) => {
   };
   return (
     <>
-      <CustomerHeader cartData={cartData} removeCartData={removeCartData} />
+      <Header cartData={cartData} removeCartData={removeCartData} />
       <div
-        className="h-[230px] p-[30px] bg-black bg-opacity-70 bg-blend-multiply text-white"
+        className="h-[400px] p-[30px] bg-black bg-opacity-70 bg-blend-multiply text-white"
         style={{
           backgroundImage:
             "url('https://a.storyblok.com/f/88809/1150x450/30a9c4f9a6/igevia_header_fastfood01_450.jpg')",
@@ -71,67 +71,44 @@ const Page = (props) => {
       >
         <div>
           {" "}
-          <h1 className="font-bold text-center text-6xl m-4">
+          <h1 className="font-bold font-serif text-center text-6xl m-4 mt-28">
             {decodeURI(name)}
           </h1>
         </div>
       </div>
-      <div className="flex bg-orange-400 p-4 font-semibold ">
-        <h4 className="w-1/4"></h4>
-        <h4 className="w-2/4">Contact: {restaurantDetails?.contact}</h4>
-        <h4 className="w-2/4">Email: {restaurantDetails?.email}</h4>
-        <h4 className="w-2/4">City: {restaurantDetails?.city}</h4>
-        <h4 className="w-2/4">Address: {restaurantDetails?.address}</h4>
+
+      <div className="relative overflow-x-auto">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+          <thead className="text-xs text-white uppercase bg-orange-400">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                Contact: {restaurantDetails?.contact}
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Email: {restaurantDetails?.email}
+              </th>
+              <th scope="col" className="px-6 py-3">
+                City: {restaurantDetails?.city}
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Address: {restaurantDetails?.address}
+              </th>
+            </tr>
+          </thead>
+        </table>
       </div>
+
       <div className="justify-center flex flex-wrap mt-12 mb-12 text-orange-400 font-semibold">
         {foodItemsDetails.length > 0 ? (
           foodItemsDetails?.map((item, index) => (
             <>
-              {/* <div
-                key={index}
-                className="flex border border-b-0 border-orange-400 p-5 text-transform: capitalize items-center"
-              >
-                <div className="pr-5">
-                  {" "}
-                  <Image
-                    className="rounded-xl"
-                    src={item?.img_path}
-                    alt={item?.name}
-                    width={150}
-                    height={100}
-                  />
-                </div>
-                <div>
-                  <div>{item?.name}</div>
-                  <div>{item?.price}</div>
-                  <div className="description font-light">
-                    {item?.description}
-                  </div>
-                  {cartIds.includes(item?._id) ? (
-                    <button
-                      className="text-white border-none bg-orange-400 p-1 rounded cursor-pointer"
-                      onClick={() => removeFromCart(item?._id)}
-                    >
-                      Remove From Cart
-                    </button>
-                  ) : (
-                    <button
-                      className="text-white border-none bg-orange-400 p-1 rounded cursor-pointer"
-                      onClick={() => addToCart(item)}
-                    >
-                      Add to cart
-                    </button>
-                  )}
-                </div>
-              </div> */}
-
               <div
-                className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow m-4 space-y-10"
+                className="w-full max-w-sm bg-white border border-gray-200 rounded-2xl shadow m-4 space-y-10"
                 key={index}
               >
                 {" "}
                 <Image
-                  className="rounded-t-lg"
+                  className="rounded-t-2xl"
                   src={item?.img_path}
                   alt={item?.name}
                   width={390}
@@ -144,9 +121,6 @@ const Page = (props) => {
                   <h6 className="m-1 text-sm h-5 font-medium tracking-tight text-gray-900 items-center overflow-hidden text-ellipsis line-clamp-2">
                     {item?.description}
                   </h6>
-
-                  {/* <br />
-                  <br /> */}
                   <div className="flex  items-center mt-2.5 mb-5">
                     <div className="flex items-center space-x-1 rtl:space-x-reverse">
                       <svg
@@ -186,7 +160,7 @@ const Page = (props) => {
                         <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
                       </svg>
                       <svg
-                        className="w-4 h-4 text-gray-200 dark:text-gray-600"
+                        className="w-4 h-4 text-gray-200"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor"
@@ -228,7 +202,7 @@ const Page = (props) => {
           <h1>No food item added for now </h1>
         )}
       </div>
-      <RestaurantFooter />
+      <Footer />
     </>
   );
 };

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const RestaurantSignUp = () => {
   const router = useRouter();
@@ -38,102 +39,47 @@ const RestaurantSignUp = () => {
     response = await response?.data;
     response?.success
       ? (() => {
+          toast.success("Registration Successfull");
           const { result } = response;
           delete result?.password;
           localStorage?.setItem("restaurantUser", JSON.stringify(result));
           router.push("/restaurant/dashboard");
         })()
-      : alert("Registration Failed");
+      : toast.error("Registration Failed");
   };
 
   return (
     <>
-      <h3 className="text-2xl font-semibold">Register</h3>
-      <form className="flex flex-col w-1/2" onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-6">
-          <label
-            for="email"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Email address
-          </label>
-          <input
-            type="email"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            placeholder="company@email.com"
-            {...register("email", { required: "Email is required" })}
-          />
-          {errors.email && <p>{errors.email.message}</p>}
-        </div>
-        <div className="mb-6">
-          <label
-            for="password"
-            className="block mb-2 text-sm font-medium text-gray-900 "
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            placeholder="•••••••••"
-            {...register("password", { required: "Password is required" })}
-          />
-          {errors.password && <p>{errors.password.message}</p>}
-        </div>
-
-        <div className="mb-6">
-          <label
-            for="confirm_password"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Confirm password
-          </label>
-          <input
-            type="password"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-            placeholder="•••••••••"
-            {...register("c_password", {
-              required: "Confirm Password is required",
-            })}
-          />
-          {errors.c_password && <p>{errors.c_password.message}</p>}
-        </div>
-        <div className="mb-6">
-          <label
-            for="address"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Address
-          </label>
-          <textarea
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-            placeholder="Enter Your Restaurant Address"
-            {...register("address", {
-              required: "Address is required",
-            })}
-          />
-          {errors.address && <p>{errors.address.message}</p>}
-        </div>
+      <h1 className="mt-5 mb-5 text-4xl font-extrabold text-gray-900">
+        <span className="text-5xl text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">
+          Dine In
+        </span>{" "}
+        Register
+      </h1>
+      <form
+        className="m-auto flex flex-col w-1/2"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="grid gap-6 mb-6 md:grid-cols-2">
           <div>
             <label
-              for="company"
-              className="block mb-2 text-sm font-medium text-gray-900"
+              htmlFor="company"
+              className="block mb-2 text-sm font-medium text-gray-900 text-left"
             >
               Restaurant Name
             </label>
             <input
               type="text"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              placeholder="Flowbite"
+              placeholder="Enter Your Restaurant Name"
               {...register("name", { required: "Restaurant Name is required" })}
             />
             {errors.name && <p>{errors.name.message}</p>}
           </div>
           <div>
             <label
-              for="phone"
-              className="block mb-2 text-sm font-medium text-gray-900 "
+              htmlFor="phone"
+              className="block mb-2 text-sm font-medium text-gray-900 text-left"
             >
               Phone Number
             </label>
@@ -141,7 +87,7 @@ const RestaurantSignUp = () => {
               type="tel"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="123-45-678"
-              pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+              pattern="[0-9]{10}"
               {...register("contact", {
                 required: "Contact Number is required",
               })}
@@ -150,8 +96,8 @@ const RestaurantSignUp = () => {
           </div>
           <div>
             <label
-              for="website"
-              className="block mb-2 text-sm font-medium text-gray-900 "
+              htmlFor="website"
+              className="block mb-2 text-sm font-medium text-gray-900 text-left"
             >
               Logo URL
             </label>
@@ -167,8 +113,8 @@ const RestaurantSignUp = () => {
           </div>
           <div>
             <label
-              for="city"
-              className="block mb-2 text-sm font-medium text-gray-900"
+              htmlFor="city"
+              className="block mb-2 text-sm font-medium text-gray-900 text-left"
             >
               City Name
             </label>
@@ -181,22 +127,86 @@ const RestaurantSignUp = () => {
             {errors.city && <p>{errors.city.message}</p>}
           </div>
         </div>
+        <div className="mb-6">
+          <label
+            htmlFor="email"
+            className="block mb-2 text-sm font-medium text-gray-900 text-left"
+          >
+            Email address
+          </label>
+          <input
+            type="email"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="company@email.com"
+            {...register("email", { required: "Email is required" })}
+          />
+          {errors.email && <p>{errors.email.message}</p>}
+        </div>
+        <div className="mb-6">
+          <label
+            htmlFor="password"
+            className="block mb-2 text-sm font-medium text-gray-900 text-left"
+          >
+            Password
+          </label>
+          <input
+            type="password"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="•••••••••"
+            {...register("password", { required: "Password is required" })}
+          />
+          {errors.password && <p>{errors.password.message}</p>}
+        </div>
+
+        <div className="mb-6">
+          <label
+            htmlFor="confirm_password"
+            className="block mb-2 text-sm font-medium text-gray-900 text-left"
+          >
+            Confirm password
+          </label>
+          <input
+            type="password"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="•••••••••"
+            {...register("c_password", {
+              required: "Confirm Password is required",
+            })}
+          />
+          {errors.c_password && <p>{errors.c_password.message}</p>}
+        </div>
+        <div className="mb-6">
+          <label
+            htmlFor="address"
+            className="block mb-2 text-sm font-medium text-gray-900 text-left"
+          >
+            Address
+          </label>
+          <textarea
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="Enter Your Restaurant Address"
+            {...register("address", {
+              required: "Address is required",
+            })}
+          />
+          {errors.address && <p>{errors.address.message}</p>}
+        </div>
 
         <div className="flex items-start mb-6">
           <div className="flex items-center h-5">
             <input
               type="checkbox"
               value=""
-              className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 "
+              className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300"
               required
             />
           </div>
           <label
-            for="remember"
-            className="ms-2 text-sm font-medium text-gray-900 "
+            htmlFor="remember"
+            className="ms-2 text-sm font-medium text-gray-900 text-left"
           >
             I agree with the{" "}
-            <a href="#" className="text-blue-600 hover:underline ">
+            <a href="#" className="text-blue-600 hover:underline">
               terms and conditions
             </a>
             .
@@ -204,7 +214,7 @@ const RestaurantSignUp = () => {
         </div>
         <button
           type="submit"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
           Submit
         </button>

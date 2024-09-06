@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import CustomerHeader from "./_components/CustomerHeader";
-import RestaurantFooter from "./_components/RestaurantFooter";
+import Header from "./_components/Header";
+import Footer from "./_components/Footer";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -84,80 +84,86 @@ export default function Home() {
   }
   return (
     <>
-      <CustomerHeader />
+      <Header />
       <div
-        className="h-[230px] p-[30px] bg-black bg-opacity-70 bg-blend-multiply text-white"
+        className="h-[400px] p-[30px] bg-black bg-opacity-70 bg-blend-multiply text-white"
         style={{
           backgroundImage:
             "url('https://a.storyblok.com/f/88809/1150x450/30a9c4f9a6/igevia_header_fastfood01_450.jpg')",
         }}
       >
-        <h1 className="font-bold text-center text-4xl m-4">Hungry Hub</h1>
-
-        <div className="bg-white p-1 border rounded-lg m-auto w-3/5 text-black relative flex shadow-lg">
-          <div className="flex items-center w-1/4 relative">
-            <Image
-              src="/images/location-icon.svg"
-              alt="Location Icon"
-              width={15}
-              height={20}
-              className="ml-2"
-            />
-            <input
-              type="text"
-              placeholder="Select Place"
-              className="h-[40px] w-full border-none pl-2 outline-none"
-              {...register("place")}
-              onClick={() => setShowLocation(true)}
-              ref={inputRef}
-            />
-            <Image
-              src="/images/caret-down-solid.svg"
-              alt="Dropdown Icon"
-              width={10}
-              height={15}
-              className="mr-2 cursor-pointer"
-              onClick={() => setShowLocation(true)}
-            />
-            {showLocation && (
-              <div
-                ref={dropdownRef}
-                className="absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-full mt-2 max-h-48 overflow-y-auto z-10"
-                style={{ top: "100%", left: 0 }}
-              >
-                <ul className="py-2 text-sm text-gray-700">
-                  {locations.map((item, index) => (
-                    <li
-                      className="cursor-pointer p-2 hover:bg-gray-200"
-                      key={index}
-                      onClick={() => handleListItem(item)}
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-          <div className="flex items-center w-3/4 pl-4">
-            <Image
-              src="/images/search-icon.svg"
-              alt="Search Icon"
-              width={30}
-              height={20}
-              className="mr-2"
-            />
-            <input
-              type="text"
-              className="h-[40px] w-full border-none outline-none bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Search for restaurant, cuisine or a dish"
-              {...register("food")}
-              onChange={(e) => loadRestaurants({ restaurant: e.target.value })}
-            />
+        <div className="flex flex-col mt-20">
+          <h1 className="font-bold text-center text-4xl m-4">Hungry Hub</h1>
+          <p className="font-normal text-center text-4xl m-4">
+            Discover the best food & drinks in Ahmedabad
+          </p>
+          <div className="bg-gray-100 mt-2 p-1 border rounded-lg m-auto w-1/2 text-black relative flex shadow-lg justify-center items-center">
+            <div className="flex w-1/4 relative">
+              <Image
+                src="/images/location-icon.svg"
+                alt="Location Icon"
+                width={13}
+                height={20}
+                className="ml-2"
+              />
+              <input
+                type="text"
+                placeholder="Ahmedabad"
+                className="h-[40px] w-full border-none pl-2 m-0 outline-none bg-gray-100 rounded-lg"
+                {...register("place")}
+                onClick={() => setShowLocation(true)}
+                ref={inputRef}
+              />
+              <Image
+                className="mr-4 cursor-pointer"
+                src="/images/caret-down-solid.svg"
+                alt="Dropdown Icon"
+                width={10}
+                height={15}
+                onClick={() => setShowLocation(true)}
+              />
+              {showLocation && (
+                <div
+                  ref={dropdownRef}
+                  className="absolute bg-gray-100 divide-y divide-gray-100 rounded-lg shadow w-full mt-2 max-h-48 overflow-y-auto z-10"
+                  style={{ top: "100%", left: 0 }}
+                >
+                  <ul className="py-2 text-sm text-gray-700">
+                    {locations.map((item, index) => (
+                      <li
+                        className="cursor-pointer p-2 hover:bg-gray-200"
+                        key={index}
+                        onClick={() => handleListItem(item)}
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+            <div className="flex w-3/4">
+              <Image
+                src="/images/search-icon.svg"
+                alt="Search Icon"
+                width={25}
+                height={20}
+                className="mr-2"
+              />
+              <input
+                type="text"
+                className="h-[40px] w-full border-none outline-none bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Search for restaurant, cuisine or a dish"
+                {...register("food")}
+                onChange={(e) =>
+                  loadRestaurants({ restaurant: e.target.value })
+                }
+              />
+            </div>
           </div>
         </div>
 
-        <div className="justify-center ml-10 p-5 grid grid-cols-2 gap-4">
+        <div className="justify-center ml-10 mt-28 p-8 grid grid-cols-2 gap-4">
           {restaurants.map((item, index) => (
             <Link
               key={index}
@@ -193,7 +199,7 @@ export default function Home() {
           ))}
         </div>
       </div>
-      <RestaurantFooter />
+      <Footer />
     </>
   );
 }

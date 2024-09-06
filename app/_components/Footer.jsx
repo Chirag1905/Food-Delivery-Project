@@ -1,6 +1,6 @@
 import React from "react";
 
-const RestaurantFooter = () => {
+const Footer = () => {
   return (
     <>
       <div className="fixed bottom-0 w-full text-center text-xs">
@@ -10,14 +10,14 @@ const RestaurantFooter = () => {
   );
 };
 
-export default RestaurantFooter;
+export default Footer;
 
 
 // import Image from "next/image";
 // import Link from "next/link";
 // import React from "react";
 
-// const RestaurantFooter = () => {
+// const Footer = () => {
 //   return (
 //     <>
 //       <footer className="bg-orange-50 w-full text-center text-xs mt-auto">
@@ -57,4 +57,4 @@ export default RestaurantFooter;
 //   );
 // };
 
-// export default RestaurantFooter;
+// export default Footer;

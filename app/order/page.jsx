@@ -1,10 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import CustomerHeader from "../_components/CustomerHeader";
-import RestaurantFooter from "../_components/RestaurantFooter";
+import Header from "../_components/Header";
+import Footer from "../_components/Footer";
 import { DELIVERY_CHARGES, TAX } from "../lib/constant";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Order = () => {
   const router = useRouter();
@@ -34,7 +35,7 @@ const Order = () => {
   }, []);
   const orderNow = async () => {
     if (!isClient) return;
-  
+
     let user_id =
       localStorage?.getItem("user") &&
       JSON.parse(localStorage?.getItem("user"))._id;
@@ -45,25 +46,27 @@ const Order = () => {
       localStorage?.getItem("cart") &&
       JSON.parse(localStorage?.getItem("cart"));
     let foodItemIds = cart?.map((item) => item?._id).toString();
-  
+
     try {
       let deliveryBoyResponse = await axios.get(
         `http://localhost:3000/api/deliverypartner/${city}`
       );
-      let deliveryBoyIds = deliveryBoyResponse?.data?.result?.map((item) => item?._id);
-  
+      let deliveryBoyIds = deliveryBoyResponse?.data?.result?.map(
+        (item) => item?._id
+      );
+
       // Debugging logs
       console.log("Delivery Boy IDs:", deliveryBoyIds);
-  
+
       // Safeguard to check if deliveryBoyIds is valid
       if (!deliveryBoyIds || deliveryBoyIds.length === 0) {
-        alert("Delivery Partner Not available");
+        toast("Delivery Partner Not available");
         return;
       }
-  
+
       let deliveryBoy_id =
         deliveryBoyIds[Math.floor(Math.random() * deliveryBoyIds.length)];
-        
+
       let resto_id = cart[0]?.resto_id;
       let collection = {
         user_id,
@@ -80,74 +83,16 @@ const Order = () => {
       response = await response?.data;
       response?.success
         ? (() => {
-            alert("Order confirmed");
+            toast.success("Order Placed!");
             setRemoveCartData(true);
             router.push("/myprofile");
           })()
-        : alert("Order failed");
+        : toast.error("Order failed");
     } catch (error) {
       console.error("Error placing order:", error);
-      alert("An error occurred while placing the order.");
+      toast.error("An error occurred while placing the order.");
     }
   };
-  
-  // const orderNow = async () => {
-  //   if (!isClient) return;
-
-  //   let user_id =
-  //     localStorage?.getItem("user") &&
-  //     JSON.parse(localStorage?.getItem("user"))._id;
-  //   let city =
-  //     localStorage?.getItem("user") &&
-  //     JSON.parse(localStorage?.getItem("user")).city;
-  //   let cart =
-  //     localStorage?.getItem("cart") &&
-  //     JSON.parse(localStorage?.getItem("cart"));
-  //   let foodItemIds = cart?.map((item) => item?._id).toString();
-  //   let deliveryBoyResponse = await axios.get(
-  //     `http://localhost:3000/api/deliverypartner/${city}`
-  //   );
-  //   deliveryBoyResponse = await deliveryBoyResponse?.data;
-  //   let deliveryBoyIds = deliveryBoyResponse?.result?.map((item) => item?._id);
-  //   let deliveryBoy_id =
-  //     deliveryBoyIds[Math?.floor(Math?.random() * deliveryBoyIds?.length)];
-  //   if (!deliveryBoy_id) {
-  //     alert("Delivery Partner Not available");
-  //     return;
-  //   }
-
-  //   let resto_id = cart[0]?.resto_id;
-  //   let collection = {
-  //     user_id,
-  //     resto_id,
-  //     foodItemIds,
-  //     deliveryBoy_id,
-  //     status: "confirm",
-  //     amount: total + DELIVERY_CHARGES + (total * TAX) / 100,
-  //   };
-  //   let response = await axios.post(
-  //     "http://localhost:3000/api/order",
-  //     collection
-  //   );
-  //   response = await response?.data;
-  //   response?.success
-  //     ? (() => {
-  //         alert("Order confirmed");
-  //         setRemoveCartData(true);
-  //         router.push("/myprofile");
-  //       })()
-  //     : alert("Order failed");
-  // };
-
-  // useEffect(() => {
-  //   if (total === 0) {
-  //     router.push("/");
-  //   }
-  // }, [total, router]);
-
-  // useEffect(() => {
-  //   !total ? router.push("/") : null;
-  // }, [total]);
 
   if (!isClient) {
     return null;
@@ -155,7 +100,7 @@ const Order = () => {
 
   return (
     <>
-      <CustomerHeader removeCartData={removeCartData} />
+      <Header removeCartData={removeCartData} />
 
       <div className="total-wrapper border-b border-orange-400 py-5 text-orange-400 font-semibold">
         <h2 className="text-black">User Details</h2>
@@ -199,7 +144,7 @@ const Order = () => {
         </div>
       </div>
 
-      <RestaurantFooter />
+      <Footer />
     </>
   );
 };

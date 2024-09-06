@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import CustomerHeader from "../_components/CustomerHeader";
-import RestaurantFooter from "../_components/RestaurantFooter";
+import Header from "../_components/Header";
+import Footer from "../_components/Footer";
 import Image from "next/image";
 import { DELIVERY_CHARGES, TAX } from "../lib/constant";
 import { useRouter } from "next/navigation";
@@ -34,11 +34,7 @@ const Cart = () => {
     const updatedCartStorage = cartStorage.filter((item) => item._id !== id);
     setCartStorage(updatedCartStorage);
     setCartData();
-
-    // Update local storage
     localStorage.setItem("cart", JSON.stringify(updatedCartStorage));
-
-    // Update total
     const updatedTotal = updatedCartStorage.reduce(
       (acc, item) => acc + item.price,
       0
@@ -59,8 +55,7 @@ const Cart = () => {
 
   return (
     <>
-      <CustomerHeader cartData={cartData} removeCartData={removeCartData} />
-
+      <Header cartData={cartData} removeCartData={removeCartData} />
       <div className="mt-12 mb-12 text-orange-400 font-semibold">
         {cartStorage.length > 0 ? (
           cartStorage.map((item) => (
@@ -96,7 +91,6 @@ const Cart = () => {
           </h1>
         )}
       </div>
-
       <div className="total-wrapper border-b border-orange-400 py-5 text-orange-400 font-semibold">
         <div className="flex justify-between px-8">
           <span>Food Charges:</span>
@@ -123,8 +117,7 @@ const Cart = () => {
           </button>
         </div>
       </div>
-
-      <RestaurantFooter />
+      <Footer />
     </>
   );
 };

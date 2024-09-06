@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import CustomerHeader from "../_components/CustomerHeader";
-import RestaurantFooter from "../_components/RestaurantFooter";
+import Header from "../_components/Header";
+import Footer from "../_components/Footer";
 import axios from "axios";
 
 const MyProfile = () => {
@@ -43,7 +43,7 @@ const MyProfile = () => {
 
   return (
     <>
-      <CustomerHeader />
+      <Header />
       {myOrders.length === 0 ? (
         <div className="text-center text-gray-500">No orders found.</div>
       ) : (
@@ -59,7 +59,7 @@ const MyProfile = () => {
           </div>
         ))
       )}
-      <RestaurantFooter />
+      <Footer />
     </>
   );
 };
